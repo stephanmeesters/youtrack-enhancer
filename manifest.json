@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "YouTrack Enhancer",
+  "version": "1.0",
+  "description": "Various enhancements for YouTrack",
+  "permissions": ["activeTab", "clipboardWrite"],
+  "content_scripts": [
+    {
+      "matches": ["http://youtrack/issue/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ]
+}
