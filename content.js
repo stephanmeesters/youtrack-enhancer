@@ -27,6 +27,7 @@ function generateButton() {
     button.style.backgroundImage = 'url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNMTEgNVYxSDF2MTBoNHY0aDEwVjV6TTIuNCA5LjZWMi40aDcuMnY3LjJ6bTExLjIgNEg2LjRWMTFIMTFWNi40aDIuNnoiPjwvcGF0aD48L3N2Zz4=")';
     button.className = 'yt-enhancer-copy-button';
     button.title = "Copy to clipboard";
+    button.innerText = "Copy commit message";
 
     return button;
 }
@@ -67,10 +68,6 @@ checkElement("yt-issue-body").then(async (element) => {
     var innerIssueElement = await checkElement(".yt-issue-body__summary.yt-issue-body__summary-common.yt-vgutter-bottom-2");
     var issueName = innerIssueElement.innerText;
 
-    var txtElement = document.createElement("div");
-    txtElement.innerHTML = "<b>Copy commit message</b>";
-    newElement.appendChild(txtElement);
-
     var inputElement = document.createElement("div");
     inputElement.innerHTML = `Peer: <input id="yt-enhancer-input-peer" style="width: 30px"/>`;
     newElement.appendChild(inputElement);
@@ -78,7 +75,13 @@ checkElement("yt-issue-body").then(async (element) => {
     var copyButton = generateButton();
     copyButton.onclick = async () => {
         var peer = document.getElementById("yt-enhancer-input-peer").value.toUpperCase();
-        var txt = `${issueName} [Peer: ${peer}]\nIssue: ${issueId}`;
+        var txt;
+        if (peer.length > 0) {
+            txt = `${issueName} [Peer: ${peer}]\nIssue: ${issueId}`;
+        }
+        else {
+            txt = `${issueName}\nIssue: ${issueId}`;
+        }
 
         try {
             await copyToClipboard(txt);

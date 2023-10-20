@@ -7,27 +7,21 @@
 
 }
 .yt-enhancer-copy-button{
-    width: 16px;
-    height: 16px;
     border: none;
+    background-color: transparent;
+    fill: currentColor;
+    color: var(--yt-app-text-color);
+    background-repeat: no-repeat;
+    background-position: 95%;
+    padding: 5px;
+    padding-right: 30px;
+  outline: 1px solid var(--yt-app-border-color);
 }
 
 .yt-enhancer-copy-button:hover {
-  outline: 2px solid blue;
+  outline: 1px solid var(--yt-app-highlight-color);
 }
 
 .yt-enhancer-copy-button:active {
-  animation: blueFlash 1s;
-}
-
-@keyframes blueFlash {
-  0% {
-    background-color: transparent;
-  }
-  50% {
-    background-color: blue;
-  }
-  100% {
-    background-color: transparent;
-  }
+  background-color: var(--yt-app-selected-background-color);
 }

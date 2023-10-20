@@ -1,14 +1,15 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "YouTrack Enhancer",
   "version": "1.0",
   "description": "Various enhancements for YouTrack",
   "permissions": ["activeTab", "clipboardWrite"],
   "content_scripts": [
     {
-      "matches": ["http://youtrack/issue/*"],
+      "matches": ["http://youtrack/issue/*", "http://youtrack/agiles/*"],
       "js": ["content.js"],
       "css": ["styles.css"]
     }
   ]
 }
+
