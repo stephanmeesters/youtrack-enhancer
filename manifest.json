@@ -10,12 +10,6 @@
       "js": ["content.js"],
       "css": ["styles.css"]
     }
-  ],
-  "commands": {
-    "copy-commit-to-clipboard": {
-      "suggested_key": "Alt+Y",
-      "description": "Copy commit message to clipboard"
-    }
-  }
+  ]
 }
 
