@@ -1,9 +1,7 @@
-setTimeout(scanAndAddCommitCopyElement(), 100);
+setTimeout(scanAndAddCommitCopyElement(), 10);
 
 function scanAndAddCommitCopyElement() {
     const template = getTemplate();
-    let keyboardListener;
-    let cbrowser = chrome ?? browser;
     checkElement(template.issueBody).then(async (element) => {
         const newElement = document.createElement("div");
         newElement.className = 'yt-enhancer-row';
@@ -32,22 +30,14 @@ function scanAndAddCommitCopyElement() {
                 console.info(error);
             }
         };
-        keyboardListener = (command) => {
-            if (command === "copy-commit-to-clipboard") {
-                copyFunc();
-            }
-        };
 
         copyButton.onclick = copyFunc;
-        cbrowser?.commands.onCommand.addListener(keyboardListener);
+        // setKeyboardListener(copyFunc);
         element.parentNode.insertBefore(newElement, element);
 
         const observer = new MutationObserver(function (_mutations) {
             if (!document.contains(newElement)) {
                 observer.disconnect();
-                if (cbrowser?.commands.onCommand.hasListener(keyboardListener)) {
-                    cbrowser?.commands.onCommand.removeListener(keyboardListener);
-                }
                 scanAndAddCommitCopyElement();
             }
         });
@@ -55,9 +45,6 @@ function scanAndAddCommitCopyElement() {
     })
         .catch((error) => {
             console.info(error);
-            if (cbrowser?.commands.onCommand.hasListener(keyboardListener)) {
-                cbrowser?.commands.onCommand.removeListener(keyboardListener);
-            }
             scanAndAddCommitCopyElement();
         });
 }

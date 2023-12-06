@@ -1,23 +1,21 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "YouTrack Enhancer",
   "version": "1.0",
   "description": "Various enhancements for YouTrack",
   "permissions": ["activeTab", "clipboardWrite"],
-  "commands": {
-    "copy-commit-to-clipboard": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Z"
-      },
-      "description": "Copy commit message to clipboard"
-    }
-  },
   "content_scripts": [
     {
       "matches": ["http://youtrack/issue/*", "http://youtrack/agiles/*"],
       "js": ["content.js"],
       "css": ["styles.css"]
     }
-  ]
+  ],
+  "commands": {
+    "copy-commit-to-clipboard": {
+      "suggested_key": "Alt+Y",
+      "description": "Copy commit message to clipboard"
+    }
+  }
 }
 
