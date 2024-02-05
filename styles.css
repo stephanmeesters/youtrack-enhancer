@@ -4,7 +4,7 @@
    justify-items: flex-start;
    align-items: center;
    gap: 10px;
-
+   margin-bottom: 5px;
 }
 .yt-enhancer-copy-button{
     border: none;

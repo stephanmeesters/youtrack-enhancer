@@ -12,13 +12,19 @@ function scanAndAddCommitCopyElement() {
       inputElement.innerHTML = `Peer: <input id=${inputIdName} style="width: 30px"/>`;
       newElement.appendChild(inputElement);
 
-      const copyButton = generateButton();
-      newElement.appendChild(copyButton);
+      const copyCommitButton = generateButton("Copy commit message");
+      newElement.appendChild(copyCommitButton);
 
-      const copyFunc = async () => {
+      const copyTitleButton = generateButton("Copy issue title");
+      newElement.appendChild(copyTitleButton);
+
+      const copyIdButton = generateButton("Copy issue ID");
+      newElement.appendChild(copyIdButton);
+
+      const copyCommitFunc = async () => {
         try {
           const innerIdElement =
-            typeof template.issueId === 'string'
+            typeof template.issueId === "string"
               ? await checkElement(template.issueId)
               : await checkElement(
                   template.issueId.elem,
@@ -38,10 +44,39 @@ function scanAndAddCommitCopyElement() {
         }
       };
 
-      copyButton.onclick = copyFunc;
+      const copyTitleFunc = async () => {
+        try {
+          const innerIssueElement = await checkElement(template.issueName);
+          const issueName = innerIssueElement.innerText;
+          await copyToClipboard(issueName);
+        } catch (error) {
+          console.info(error);
+        }
+      };
+
+      const copyIdFunc = async () => {
+        try {
+          const innerIdElement =
+            typeof template.issueId === "string"
+              ? await checkElement(template.issueId)
+              : await checkElement(
+                  template.issueId.elem,
+                  template.issueId.parent,
+                );
+          const issueId = innerIdElement.innerText;
+          await copyToClipboard(issueId);
+        } catch (error) {
+          console.info(error);
+        }
+      };
+
+      copyCommitButton.onclick = copyCommitFunc;
+      copyTitleButton.onclick = copyTitleFunc;
+      copyIdButton.onclick = copyIdFunc;
+
       element.parentNode.insertBefore(newElement, element);
 
-      const observer = new MutationObserver(function (_mutations) {
+      const observer = new MutationObserver((_mutations) => {
         if (!document.contains(newElement)) {
           observer.disconnect();
           scanAndAddCommitCopyElement();
@@ -51,7 +86,7 @@ function scanAndAddCommitCopyElement() {
     })
     .catch((error) => {
       console.info(error);
-      setTimeout(scanAndAddCommitCopyElement, 3000);
+      setTimeout(scanAndAddCommitCopyElement, 1000);
     });
 }
 
@@ -64,32 +99,29 @@ function getTemplate() {
         issueName:
           ".yt-issue-body__summary.yt-issue-body__summary-common.yt-vgutter-bottom-2",
       };
-    } else {
-      return {
-        issueBody: "span.highlighter__d45",
-        issueId: {
-          elem: ".ring-ui-inner_e3ba.__singleValue__",
-          parent: ".idLink__a4b",
-        },
-        issueName: `h1[data-test="ticket-summary"]`,
-      };
     }
-  } else {
     return {
-      issueBody: "yt-issue-body",
-      issueId: ".js-issue-id",
-      issueName:
-        ".yt-issue-body__summary.yt-issue-body__summary-common.yt-vgutter-bottom-2",
+      issueBody: '[class^="highlighter__"]',
+      issueId: {
+        elem: '[class^="ring-ui-inner_"]',
+        parent: '[class^="idLink__"]',
+      },
+      issueName: `h1[data-test="ticket-summary"]`,
     };
   }
+  return {
+    issueBody: "yt-issue-body",
+    issueId: ".js-issue-id",
+    issueName:
+      ".yt-issue-body__summary.yt-issue-body__summary-common.yt-vgutter-bottom-2",
+  };
 }
 
 function isLiteMode() {
   if (document.body.classList.contains("global_simplified-ui")) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 function checkElement(selector, parentSelector = undefined, timeout = 3000) {
@@ -136,14 +168,13 @@ function checkElement(selector, parentSelector = undefined, timeout = 3000) {
     }, timeout);
   });
 }
-function generateButton() {
+function generateButton(label) {
   const button = document.createElement("button");
 
   button.style.backgroundImage =
     'url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNMTEgNVYxSDF2MTBoNHY0aDEwVjV6TTIuNCA5LjZWMi40aDcuMnY3LjJ6bTExLjIgNEg2LjRWMTFIMTFWNi40aDIuNnoiPjwvcGF0aD48L3N2Zz4=")';
   button.className = "yt-enhancer-copy-button";
-  button.title = "Copy to clipboard";
-  button.innerText = "Copy commit message";
+  button.innerText = label;
 
   return button;
 }
